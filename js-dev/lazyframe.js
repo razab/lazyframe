@@ -312,48 +312,33 @@ const Lazyframe = () => {
     lazyframe.iframe = getIframe(lazyframe.settings);
 
     if (lazyframe.settings.thumbnail && loadImage) {
+      lazyframe.el.style.backgroundImage = `url(${lazyframe.settings.thumbnail})`;
+    }
+
+    if (lazyframe.settings.title && lazyframe.el.children.length === 0) {
+      const docfrag = document.createDocumentFragment(),
+            titleNode = document.createElement('span');
+
+      titleNode.className = 'lazyframe__title';
       
-    
+      console.log("aaaa");
 
-      if (lazyframe.settings.title && lazyframe.el.children.length === 0) {
-        const docfrag = document.createDocumentFragment(),
-              titleNode = document.createElement('div');
-
-        titleNode.className = 'lazyframe__title';
-        
-        if(lazyframe.settings.vendor == "youtube-playlist"){
-          console.log("creating link element");
-          console.dir("settings", lazyframe.settings);
-          const playlistIcon = document.createElement('div');
-          playlistIcon.className = 'lazyframe__title_icon';
-          playlistIcon.innerHTML = "&nbsp;";
-          const playlistCount = document.createElement('div');
-          playlistCount.className = 'lazyframe__title_count';
-          playlistCount.innerText = "1/302"
-          // const playlistCount = document.createElement('span');
-          const titleLink = document.createElement('a');
-          titleLink.className = 'lazyframe__title_link';
-          titleLink.setAttribute('target', '_blank');
-          titleLink.setAttribute('href', `https://www.youtube.com/watch?list=${lazyframe.settings.playlistId}&v=${lazyframe.settings.videoId}`);
-          titleLink.innerText = lazyframe.settings.title;
-          titleNode.appendChild(playlistIcon);
-          titleNode.appendChild(playlistCount);
-          titleNode.appendChild(titleLink);
-
-          const background = document.createElement('div');
-          background.className = 'lazyframe__background';
-          background.style.backgroundImage = `url(${lazyframe.settings.thumbnail})`;
-
-          lazyframe.el.appendChild(background);
-        }else{
-          titleNode.innerHTML = lazyframe.settings.title;
-          lazyframe.el.style.backgroundImage = `url(${lazyframe.settings.thumbnail})`;
-        }
-
-        docfrag.appendChild(titleNode);
-
-        lazyframe.el.appendChild(docfrag);
+      if(lazyframe.settings.vendor == "youtube-playlist"){
+        console.log("creating link element");
+        console.dir("settings", lazyframe.settings);
+        const titleLink = document.createElement('a');
+        titleLink.className = 'lazyframe__title_link';
+        titleLink.setAttribute('target', '_blank');
+        titleLink.setAttribute('href', `https://www.youtube.com/watch?list=${lazyframe.settings.playlistId}&v=${lazyframe.settings.videoId}`);
+        titleLink.innerText = lazyframe.settings.title;
+        titleNode.appendChild(titleLink);
+      }else{
+        titleNode.innerHTML = lazyframe.settings.title;
       }
+
+      docfrag.appendChild(titleNode);
+
+      lazyframe.el.appendChild(docfrag);
     }
 
     if (!settings.lazyload) {
